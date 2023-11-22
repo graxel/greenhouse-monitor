@@ -1,0 +1,85 @@
+-- https://dbdiagram.io/d
+
+Table users {
+  id int [pk]
+  username varchar
+}
+
+Table company {
+  id int [pk]
+  name varchar
+  website_url varchar
+  website_type varchar
+}
+
+Table user_interest {
+  id int 
+  userid int [ref: > users.id]
+  company_id int [ref: > company.id]
+}
+
+Table company_page_scrapes {
+  company_page_scrape_id int [pk]
+  scraped_at datetime
+  company_id int [ref: > company.id]
+  website_url varchar
+  website_type varchar
+}
+
+Table listing_parses {
+  listing_parse_id int [pk]
+  company_page_scrape_id int [ref: > company_page_scrapes.company_page_scrape_id]
+  scraped_at datetime
+  company_id int [ref: > company.id]
+  job_title varchar
+  department int
+  location int
+  job_page_url varchar
+  website_type varchar
+}
+
+Table job_scrapes {
+  job_scrape_id int [pk]
+  scraped_at datetime
+  job_id int [ref: > jobs.job_id]
+  company_id int [ref: > company.id]
+  department int
+  location int
+  job_title varchar
+  job_page_url varchar
+  job_description text
+  website_type varchar
+}
+
+Table jobs {
+  job_id int [pk]
+  first_scraped_at datetime
+  last_scraped_at datetime
+  is_active varchar
+  company_id int [ref: > company.id]
+  department int
+  location int
+  job_title varchar
+  job_page_url varchar
+  job_description text
+  website_type varchar
+}
+
+Table company_page_scraper_status {
+  status_id int [pk]
+  status varchar
+  company_page_scrape_id int [ref: > company_page_scrapes.company_page_scrape_id]
+  company_id int [ref: > company.id]
+  worker_id int
+  event_time datetime
+  website_type varchar
+}
+
+Table job_scraper_status {
+  status_id int [pk]
+  status varchar
+  job_scrape_id int [ref: > job_scrapes.job_scrape_id]
+  worker_id int
+  event_time datetime
+  website_type varchar
+}

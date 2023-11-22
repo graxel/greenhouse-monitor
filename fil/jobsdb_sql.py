@@ -2,14 +2,13 @@ import os
 import sys
 import psycopg2
 from psycopg2 import OperationalError, Error
-import traceback
 
 
 def sql(query, data=None):
     try:
         conn = psycopg2.connect(
-            host='jobs.cizqajxkdnqn.us-east-1.rds.amazonaws.com',
-            database='jobsdb',
+            host=os.getenv('JOBSDB_HOST'),
+            database=os.getenv('JOBSDB_DATABASE'),
             user=os.getenv('JOBSDB_USERNAME'),
             password=os.getenv('JOBSDB_PASSWORD'))
         cursor = conn.cursor()
@@ -17,14 +16,10 @@ def sql(query, data=None):
             cursor.execute(query)
         else:
             cursor.execute(query, data)
-        # print('cursor.rowcount =', cursor.rowcount)
         conn.commit()
-        # if cursor.rowcount != -1:
-        #     rows = cursor.fetchall()
-        #     return rows
-
-    # except Exception as error:
-    #     traceback.print_exc(sys.exc_info())
+        if cursor.pgresult_ptr is not None:
+            rows = cursor.fetchall()
+            return rows
     except Error as e:
         print("Error: Unable to execute the query.")
         print(e)
@@ -41,6 +36,15 @@ def create_scraper_status_table():
             scraper_id integer,
             scraper_status varchar(255),
             scraper_type varchar(255),
+            company_name varchar(255),
+            jobs_site varchar(255),
+            page_url varchar(255)
+        )
+        ;""")
+
+def create_companies_table():
+    sql("""
+        CREATE TABLE public.scraper_status (
             company_name varchar(255),
             jobs_site varchar(255),
             page_url varchar(255)
@@ -67,13 +71,14 @@ def create_test_table():
         )
         ;""")
 
+
 if __name__ == "__main__":
-    # create_test_table()
     resp = sql("""
-        SELECT table_name, column_name
+        SELECT table_schema, table_name, column_name
         FROM information_schema.columns
-        WHERE table_schema = 'public'
-        ORDER BY table_name
+        WHERE table_schema in ('public', 'dev')
+        ORDER BY table_schema, table_name
         ;""")
-    for line in resp:
-        print(line)
+    if resp is not None:
+        for line in resp:
+            print(line)

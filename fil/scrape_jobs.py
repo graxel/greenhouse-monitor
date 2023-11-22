@@ -88,7 +88,6 @@ def update_status(status_dict):
         INSERT INTO scraper_status ({column_names})
         VALUES ({data_placeholders})
         ;"""
-
     sql(insert_query, data)
 
 def scrape_company_page(company_name, company_page_url, jobs_site='Greenhouse'):
