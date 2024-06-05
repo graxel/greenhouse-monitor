@@ -1,0 +1,98 @@
+ACLIMA
+AHA
+AT&T
+Absolutdata
+Accenture
+Adobe
+Algorithmia
+Alteryx
+Amazon
+Apple
+Bank of America
+Boeing
+Booz Allen Hamilton
+CENSIA
+Capital One
+Cisco
+Citi
+Civis Analytics
+Cloudera
+Comcast
+Cropin
+DSTILLERY
+Databricks
+Datarails
+Dell
+Deloitte
+Dice
+EVERSTREAM ANALYTICS
+EY
+Enigma
+Google
+HCA
+HP
+HPE
+Honeywell
+IBM
+IQVIA
+Info Way Solutions
+Intel
+JPMorgan Chase & Co
+Jellyfish
+Johnson & Johnson
+KNIME
+KPMG
+LinkedIn
+MachineMetrics
+MailChimp
+Mastercard
+Messari
+Meta
+Microsoft
+Mu Sigma
+NFERENCE
+NVIDIA
+Nielsen
+Numerator
+OpenText
+Oracle
+Orbital Insight
+PayPal
+Procter & Gamble
+PureSpectrum
+PwC
+ROBUST INTELLIGENCE
+RS21
+RSM
+Resurface Labs
+Roche
+SAS
+SOPHIA GENETICS
+SPOTIFY
+Salesforce
+Sensible Weather
+Sherwin Williams
+Siemens
+Sisense
+Splunk
+Striveworks
+Sumo Logic
+Teradata
+Tesla
+The Home Depot
+TheMathCompany
+Tonic.ai
+Twitter
+Uber
+Unified
+UnitedHealth
+VAST DATA
+VIRTUALITICS
+VMware
+Varsity Tutors
+Verizon
+Walmart
+Wayfair
+Wells Fargo
+Zoom
+dbt Labs

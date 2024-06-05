@@ -12,19 +12,7 @@ with open('database_schema_setup.sql') as f:
 # sql(setup_sql)
 
 
-print('\npublic\n=======================')
-
-rows = fil.sql(f"""
-    SELECT table_name, column_name
-    FROM information_schema.columns
-    WHERE table_schema = 'public'
-    ORDER BY table_name
-    ;""")
-for row in rows:
-    print(row)
-
-
-print('\ndev\n=======================')
+print('dev\n=======================')
 
 rows = fil.sql(f"""
     SELECT table_name, column_name

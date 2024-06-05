@@ -1,0 +1,45 @@
+DEPLOYMENT
+set up database [on another drive [is it possible to map a folder to a drive or vice versa]]
+    db_setup.py
+    [maybe some kind of test to see if this is necessary, but I'll hardcode it for now]
+
+
+
+
+A. Company prioritizer -- PROCESS
+    1. For now -- Activated every N seconds
+    2. Calls company page scraper to scrape least recently scraped company
+
+B. Company page scraper -- FUNCTION
+    1. Given a company_id to scrape
+    2. Get data for that company_id
+    2. Update company scraper status to "scraping"
+    3. Scrape company page
+    4. Add scrape record to COMPANY_SCRAPES
+    5. Update company scraper status to "parsing"
+    6. Parse data
+    7. Update company scraper status to "storing data"
+    8. Add parsed data to LISTINGS
+    9. Update company scraper status to "finished"
+
+C. Job prioritizer -- PROCESS
+    1. For now -- Activated every N seconds
+    2. Calls job page scraper to scrape least recently scraped job
+
+D. Job page scraper -- FUNCTION
+    1. Get a somehow prioritized job to scrape
+    1. Given a job to scrape
+    2. Update job scraper status to "scraping"
+    3. Scrape job page
+    4. Update job scraper status to "parsing"
+    5. Parse data
+    6. Update job scraper status to "storing data"
+    7. Add parsed data to JOB_SCRAPES
+    8. Update job scraper status to "finished"
+
+E. JOBS table updater -- PROCESS
+    1. For now -- Activated every N seconds
+    2. Filter by DATE
+    2. Group by JOB_ID
+    3. Get most recent job details of each JOB_ID
+

@@ -1,10 +1,4 @@
 import add_root
-
-
-
-print(add_root.__doc__)
-
-
 import fil
 
 rows = fil.sql("""

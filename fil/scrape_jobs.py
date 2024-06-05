@@ -5,15 +5,14 @@ import json
 from datetime import datetime as dt
 from bs4 import BeautifulSoup
 
-from jobsdb_sql import sql
-
+import add_root
+from fil.jobsdb_sql import sql
 
 def load_page(url):
-    scraped_at = time.time()
     user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 ' + \
         '(KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'
     response = requests.get(url, headers={'User-Agent': user_agent})
-    return response, scraped_at
+    return response
 
 def parse_greenhouse_page(response):
     soup = BeautifulSoup(response.content, 'html.parser')
@@ -28,38 +27,37 @@ def parse_greenhouse_page(response):
             element = element.parent
             hierarchy.append(element.find_all()[0].get_text(separator=' '))
         jobs.append({
-            'Title': job_title,
-            'URL': job_url,
-            'Location': job_loc,
-            'Hierarchy': hierarchy
+            'job_title': job_title,
+            'job_page_url': job_url,
+            'location': job_loc,
+            'department': hierarchy
         })
     return jobs
 
-def save_to_db(company, jobs, scraped_at):
-    if len(jobs) == 0:
+def save_to_db(company_page_scrape_id, scraped_at, company_id, company_name, jobs, website_type):
+
+    if jobs is None or len(jobs) == 0:
         return None
-    scraped_at = dt.fromtimestamp(scraped_at).strftime('%Y-%m-%d %H:%M:%S.%f')
     data = []
     placeholder_list = []
     for job in jobs:
-        title = job['Title']
-        location = job['Location']
-        department = str(job['Hierarchy'])
-        url = job['URL']
+        job_title = job['job_title']
+        location = job['location']
+        department = str(job['department'])
+        job_page_url = job['job_page_url']
 
-        row = (scraped_at, title, company, location, department, url)
+        row = (company_page_scrape_id, scraped_at, company_id, company_name, job_title, department, location, job_page_url, website_type)
+
         row_placeholders = ', '.join(['%s']*len(row))
         data.extend(row)
         placeholder_list.append('(' + row_placeholders + ')')
 
-    column_names = 'scraped_at, title, company, location, department, url'
+    column_names = 'company_page_scrape_id, scraped_at, company_id, company_name, job_title, department, location, job_page_url, website_type'
     data_placeholders = ', '.join(placeholder_list)
     insert_query = f"""
-        INSERT INTO jobs ({column_names})
+        INSERT INTO listing_parses ({column_names})
         VALUES {data_placeholders}
         ;"""
-    print(insert_query)
-    print(data)
     sql(insert_query, data)
 
 def test_save(test_data):
@@ -80,52 +78,72 @@ def test_save(test_data):
 
     sql(insert_query, data)
 
-def update_status(status_dict):
-    column_names = ', '.join(status_dict.keys())
-    data = tuple(status_dict.values())
-    data_placeholders = ', '.join(['%s']*len(data))
+def update_company_scraper_status(scraper_status_info):
     insert_query = f"""
-        INSERT INTO scraper_status ({column_names})
-        VALUES ({data_placeholders})
+        INSERT INTO company_page_scraper_status (company_page_scrape_id, status)
+        VALUES (%s, %s)
         ;"""
-    sql(insert_query, data)
+    sql(insert_query, scraper_status_info)
 
-def scrape_company_page(company_name, company_page_url, jobs_site='Greenhouse'):
+def scrape_company_page(company_data):
+    company_id, company_name, website_url, website_type = company_data
+    started_at = dt.now().strftime('%Y-%m-%d %H:%M:%S.%f')
 
-    scraper_info = {
-        'scraper_id': 0,
-        'scraper_type': 'company',
-        'company_name': company_name,
-        'jobs_site': jobs_site,
-        'page_url': company_page_url
-    }
+    # record scrape attempt, get scrape_id
+    scrape_data = (started_at, company_id, company_name, website_url, website_type)
+    result = sql(f"""
+        INSERT INTO company_page_scrapes
+            (started_at, company_id, company_name, website_url, website_type)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING company_page_scrape_id
+        ;""", scrape_data)
+    company_page_scrape_id = result[0][0]
 
-    scraper_info['scraper_status'] = 'Scraping page'
-    update_status(scraper_info)
-    response, scraped_at = load_page(company_page_url)
+    # try:
+    print('scraping page', flush=True)
+    scraper_status_info = (company_page_scrape_id, 'Scraping page')
+    update_company_scraper_status(scraper_status_info)
+    scraped_at = dt.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+    response = load_page(website_url)
 
-    scraper_info['scraper_status'] = 'Parsing page'
-    update_status(scraper_info)
-    if jobs_site=='Greenhouse':
+    print('parsing page', flush=True)
+    scraper_status_info = (company_page_scrape_id, 'Parsing page')
+    update_company_scraper_status(scraper_status_info)
+    if website_type=='Greenhouse':
         jobs = parse_greenhouse_page(response)
+    else:
+        jobs = None
 
-    scraper_info['scraper_status'] = 'Storing jobs in DB'
-    update_status(scraper_info)
-    save_to_db(company_name, jobs, scraped_at)
+    print('Storing jobs in DB', flush=True)
+    scraper_status_info = (company_page_scrape_id, 'Storing jobs in DB')
+    update_company_scraper_status(scraper_status_info)
+    save_to_db(company_page_scrape_id, scraped_at, company_id, company_name, jobs, website_type)
 
-    scraper_info['scraper_status'] = 'Finished'
-    update_status(scraper_info)
+    print('Finished', flush=True)
+    scraper_status_info = (company_page_scrape_id, 'Finished')
+    update_company_scraper_status(scraper_status_info)
+
+    finished_at = dt.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+    sql(f"""
+        UPDATE company_page_scrapes
+        SET finished_at = %s
+        WHERE company_page_scrape_id = %s
+        ;""", (finished_at, company_page_scrape_id))
+
+    # except:
+    #     print('scrape error', flush=True)
 
 
 if __name__ == "__main__":
-    scrape_dict = {
-        # 'Faire': 'https://boards.greenhouse.io/faire',
-        # 'Point72': 'https://boards.greenhouse.io/point72',
-        # 'Twitch': 'https://boards.greenhouse.io/twitch',
-        'Ogilvy Health USA': 'https://boards.greenhouse.io/ogilvyhealthusa',
-        'Ogilvy UK': 'https://boards.greenhouse.io/ogilvyuk'
-    }
+    print('test')
+    # scrape_dict = {
+    #     # 'Faire': 'https://boards.greenhouse.io/faire',
+    #     # 'Point72': 'https://boards.greenhouse.io/point72',
+    #     # 'Twitch': 'https://boards.greenhouse.io/twitch',
+    #     'Ogilvy Health USA': 'https://boards.greenhouse.io/ogilvyhealthusa',
+    #     'Ogilvy UK': 'https://boards.greenhouse.io/ogilvyuk'
+    # }
 
-    for company_name, company_page_url in scrape_dict.items():
-        scrape_company_page(company_name, company_page_url)
+    # for company_name, company_page_url in scrape_dict.items():
+    #     scrape_company_page(company_name, company_page_url)
 
