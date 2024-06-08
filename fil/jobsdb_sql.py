@@ -1,27 +1,19 @@
-import os
-import psycopg2
-from psycopg2 import OperationalError, Error
-
+import sqlite3
 
 def sql(query, data=None):
     try:
-        conn = psycopg2.connect(
-            host=os.getenv('JOBSDB_HOST'),
-            database=os.getenv('JOBSDB_DATABASE'),
-            user=os.getenv('JOBSDB_USERNAME'),
-            password=os.getenv('JOBSDB_PASSWORD'))
+        conn = sqlite3.connect('fil.db')
         cursor = conn.cursor()
         if data is None:
             cursor.execute(query)
         else:
             cursor.execute(query, data)
         conn.commit()
-        if cursor.pgresult_ptr is not None:
+        if cursor.description:  # Check if the query returns any result
             rows = cursor.fetchall()
             return rows
-    except Error as e:
+    except:
         print("Error: Unable to execute the query.")
-        print(e)
     finally:
         if cursor:
             cursor.close()
@@ -73,11 +65,19 @@ def create_test_table():
 
 if __name__ == "__main__":
     resp = sql("""
-        SELECT table_schema, table_name, column_name
-        FROM information_schema.columns
-        WHERE table_schema in ('public', 'dev')
-        ORDER BY table_schema, table_name
+        SELECT name FROM sqlite_master  
+        WHERE type='table'
         ;""")
+    print(resp)
+    print()
     if resp is not None:
         for line in resp:
             print(line)
+        for table in resp:
+            table = table[0]
+            columns = sql(f'''
+                SELECT '{table}', *
+                FROM PRAGMA_TABLE_INFO('{table}')
+                ;''')
+            for column in columns:
+                print(column)
