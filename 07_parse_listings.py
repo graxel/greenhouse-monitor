@@ -125,7 +125,7 @@ while True:
                 # print(df, flush=True)
                 flattened_data = df.values.flatten().tolist()
 
-                data_s = ['(' + ', '.join(['%s'] * len(row)) + ')' for row in df.values]
+                data_s = ['(' + ', '.join(['?'] * len(row)) + ')' for row in df.values]
                 data_placeholders = ', '.join(data_s)
 
                 # print(data_placeholders, flush=True)
@@ -141,6 +141,6 @@ while True:
         fil.sql("""
             UPDATE company_page_scrapes
             SET processed = true
-            WHERE company_page_scrape_id = %s
+            WHERE company_page_scrape_id = ?
         ;""", (company_page_scrape_id,))
         print('\tdone\n', flush=True)

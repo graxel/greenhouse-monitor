@@ -4,7 +4,7 @@ import pandas as pd
 job_site_list = pd.read_csv('seed_data/job_site_list.csv').drop_duplicates()
 
 def prep_for_insert(data):
-    data_s = data.apply(lambda r: '(' + ', '.join(['%s']*len(r)) + ')', axis=1)
+    data_s = data.apply(lambda r: '(' + ', '.join(['?']*len(r)) + ')', axis=1)
     data_placeholders = ', '.join(data_s)
     flattened_data = data.values.flatten().tolist()
     return flattened_data, data_placeholders

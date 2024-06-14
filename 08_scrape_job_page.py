@@ -86,7 +86,7 @@ try:
                 insert_query = f"""
                     INSERT INTO job_scrapes
                         (started_at, finished_at, company_id, job_page_url, website_type, page_hash)
-                    VALUES (%s, %s, %s, %s, %s, %s);
+                    VALUES (?, ?, ?, ?, ?, ?);
                 """
                 fil.sql(insert_query, data)
             if 1 == 0: ####### break loop after certain point? (change the 1 == 0)

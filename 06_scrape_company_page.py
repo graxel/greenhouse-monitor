@@ -163,7 +163,7 @@ try:
             insert_query = f"""
                 INSERT INTO company_page_scrapes
                     (started_at, finished_at, company_id, company_name, website_url, website_type, page_hash)
-                VALUES (%s, %s, %s, %s, %s, %s, %s);
+                VALUES (?, ?, ?, ?, ?, ?, ?);
             """
             fil.sql(insert_query, data)
 

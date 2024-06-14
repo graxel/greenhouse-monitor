@@ -55,7 +55,7 @@ CREATE TABLE users (
 CREATE TABLE companies (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   company_name TEXT,
-  website_url TEXT,
+  website_url TEXT UNIQUE,
   website_type TEXT,
   blacklisted BOOLEAN DEFAULT FALSE
 );

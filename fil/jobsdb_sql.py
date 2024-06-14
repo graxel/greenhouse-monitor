@@ -1,4 +1,5 @@
 import sqlite3
+import traceback
 
 def sql(query, data=None):
     try:
@@ -13,7 +14,8 @@ def sql(query, data=None):
             rows = cursor.fetchall()
             return rows
     except:
-        print("Error: Unable to execute the query.")
+        print(F"Error: Unable to execute the query.\n{query}")
+        print(traceback.format_exc())
     finally:
         if cursor:
             cursor.close()

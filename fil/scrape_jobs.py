@@ -48,7 +48,7 @@ def save_to_db(company_page_scrape_id, scraped_at, company_id, company_name, job
 
         row = (company_page_scrape_id, scraped_at, company_id, company_name, job_title, department, location, job_page_url, website_type)
 
-        row_placeholders = ', '.join(['%s']*len(row))
+        row_placeholders = ', '.join(['?']*len(row))
         data.extend(row)
         placeholder_list.append('(' + row_placeholders + ')')
 
@@ -65,7 +65,7 @@ def test_save(test_data):
     placeholder_list = []
     for firstname, lastname in test_data:
         row = (firstname, lastname)
-        row_placeholders = ', '.join(['%s']*len(row))
+        row_placeholders = ', '.join(['?']*len(row))
         data.extend(row)
         placeholder_list.append('(' + row_placeholders + ')')
 
@@ -81,7 +81,7 @@ def test_save(test_data):
 def update_company_scraper_status(scraper_status_info):
     insert_query = f"""
         INSERT INTO company_page_scraper_status (company_page_scrape_id, status)
-        VALUES (%s, %s)
+        VALUES (?, ?)
         ;"""
     sql(insert_query, scraper_status_info)
 
@@ -94,7 +94,7 @@ def scrape_company_page(company_data):
     result = sql(f"""
         INSERT INTO company_page_scrapes
             (started_at, company_id, company_name, website_url, website_type)
-        VALUES (%s, %s, %s, %s, %s)
+        VALUES (?, ?, ?, ?, ?)
         RETURNING company_page_scrape_id
         ;""", scrape_data)
     company_page_scrape_id = result[0][0]
@@ -126,8 +126,8 @@ def scrape_company_page(company_data):
     finished_at = dt.now().strftime('%Y-%m-%d %H:%M:%S.%f')
     sql(f"""
         UPDATE company_page_scrapes
-        SET finished_at = %s
-        WHERE company_page_scrape_id = %s
+        SET finished_at = ?
+        WHERE company_page_scrape_id = ?
         ;""", (finished_at, company_page_scrape_id))
 
     # except:

@@ -181,7 +181,7 @@ def check_for_job(job_page_url):
             location,
             job_page_url
         from jobs
-        where job_page_url = %s
+        where job_page_url = ?
         limit 100
         ;""", (job_page_url,))
     return jobs_that_already_exist
@@ -236,7 +236,7 @@ while True:
             data['page_hash'] = page_hash
 
             column_names = ', '.join(data.keys())
-            data_placeholders = ', '.join(['%s']*len(data.keys()))
+            data_placeholders = ', '.join(['?']*len(data.keys()))
 
             
             insert_query = f"""

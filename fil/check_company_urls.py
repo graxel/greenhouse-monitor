@@ -19,7 +19,7 @@ def check_url(test_url):
         data = (test_url, end_url, does_redirect)
         insert_query = f"""
             INSERT INTO redirects (test_url, end_url, does_redirect)
-            VALUES (%s, %s, %s)
+            VALUES (?, ?, ?)
             ON CONFLICT (test_url) 
             DO UPDATE SET end_url = EXCLUDED.end_url, does_redirect = EXCLUDED.does_redirect
             ;"""

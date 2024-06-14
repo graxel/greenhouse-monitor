@@ -11,7 +11,7 @@ import fil
 def insert_company(row):
     insert_query = """
         INSERT INTO companies (company_name, website_url, website_type, blacklisted)
-        VALUES (%s, %s, %s, %s)
+        VALUES (?, ?, ?, ?)
         ON CONFLICT (website_url) 
         DO UPDATE SET
             company_name = EXCLUDED.company_name,

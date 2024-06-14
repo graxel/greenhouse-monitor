@@ -65,7 +65,7 @@ def perform_search(company_name_id, company_name, job_site_id, job_site_name, jo
         ]
 
         flattened_data = [item for result in results for item in result]
-        data_s = ['(' + ', '.join(['%s'] * len(result)) + ')' for result in results]
+        data_s = ['(' + ', '.join(['?'] * len(result)) + ')' for result in results]
         data_placeholders = ', '.join(data_s)
 
         # Insert data into the database

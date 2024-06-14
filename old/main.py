@@ -18,7 +18,7 @@ insert_query = """
         INSERT INTO company_page_scrapes (
             started_at, finished_at, company_id, website_url, website_type
         )
-        VALUES (%s, %s, %s, %s, %s)
+        VALUES (?, ?, ?, ?, ?)
         RETURNING company_page_scrape_id
         ;"""
 result = fil.sql("""

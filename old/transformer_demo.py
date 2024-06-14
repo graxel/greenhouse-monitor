@@ -36,7 +36,7 @@ print('finished', flush=True)
 #     FROM application_history
 #     LEFT JOIN vectors
 #     ON vectors.job_id = application_history.job_id
-#     WHERE jobs.scraped_at >= CURRENT_DATE - INTERVAL %s
+#     WHERE jobs.scraped_at >= CURRENT_DATE - INTERVAL ?
 #     ;""", (how_recent,))
 
 # jobs_applied_to = fil.sql("""
@@ -46,7 +46,7 @@ print('finished', flush=True)
 #     FROM application_history
 #     LEFT JOIN vectors
 #     ON vectors.job_id = application_history.job_id
-#     WHERE application_history.user_id = %s
+#     WHERE application_history.user_id = ?
 #     ;""", (user_id,))
 
 from transformers import LongformerTokenizer, LongformerModel
@@ -129,7 +129,7 @@ for job in unvectored_jobs:
     # pickled_embedding = pickle.dumps(embedding)
     # fil.sql("""
     #     INSERT INTO vectors (job_id, vector)
-    #     VALUES (%s, %s))
+    #     VALUES (?, ?))
     #     ;""", (job[0], pickled_embedding)
     # )
 
