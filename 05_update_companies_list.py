@@ -5,7 +5,7 @@ Company list updater -- SCRIPT
     3. Upserts rows into DB
 """
 import pandas as pd
-import add_root
+
 import fil
 
 def insert_company(row):

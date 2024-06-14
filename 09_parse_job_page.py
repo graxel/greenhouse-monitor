@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import sys
-import add_root
+
 import fil
 import time
 

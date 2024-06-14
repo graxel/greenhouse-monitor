@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 import hashlib
 
-import add_root
+
 import fil
 
 

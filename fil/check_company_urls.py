@@ -1,6 +1,6 @@
 import requests
 
-import add_root
+
 from fil.jobsdb_sql import sql
 
 def check_url(test_url):

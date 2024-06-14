@@ -1,7 +1,7 @@
 # from transformers import BertModel, BertTokenizer
 from scipy.spatial.distance import cosine
 import torch
-import add_root
+
 import fil
 
 # # Load pre-trained BERT model and tokenizer

@@ -1,4 +1,4 @@
-import add_root
+
 import os, sys
 thispath = os.path.dirname(__file__)
 if thispath not in sys.path: sys.path.append(thispath)

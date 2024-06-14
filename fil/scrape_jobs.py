@@ -5,7 +5,7 @@ import json
 from datetime import datetime as dt
 from bs4 import BeautifulSoup
 
-import add_root
+
 from fil.jobsdb_sql import sql
 
 def load_page(url):

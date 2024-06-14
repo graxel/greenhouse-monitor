@@ -4,7 +4,7 @@ Company prioritizer -- PROCESS
     2. Get least recently scraped company
     3. Calls company page scraper to scrape company
 """
-import add_root
+
 import os, sys
 thispath = os.path.dirname(__file__)
 if thispath not in sys.path: sys.path.append(thispath)
