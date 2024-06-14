@@ -10,14 +10,17 @@ import fil
 
 def insert_company(row):
     insert_query = """
-        INSERT INTO companies (company_name, website_url, website_type)
-        VALUES (%s, %s, %s)
+        INSERT INTO companies (company_name, website_url, website_type, blacklisted)
+        VALUES (%s, %s, %s, %s)
         ON CONFLICT (website_url) 
-        DO UPDATE SET company_name = EXCLUDED.company_name, website_type = EXCLUDED.website_type
+        DO UPDATE SET
+            company_name = EXCLUDED.company_name,
+            website_type = EXCLUDED.website_type,
+            blacklisted = EXCLUDED.blacklisted
         ;"""
     fil.sql(
         insert_query,
-        (row['company_name'], row['website_url'], row['website_type'])
+        (row['company_name'], row['website_url'], row['website_type'], row['blacklisted'])
     )
 
 pd.read_csv('companies_to_add.csv').drop_duplicates().apply(insert_company, axis=1)

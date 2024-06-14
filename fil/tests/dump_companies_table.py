@@ -28,8 +28,8 @@ def sql(query, data=None):
         if conn:
             conn.close()
     
-res = sql("""SELECT * FROM companies;""")
+res = sql("""SELECT company_name, website_url, website_type, blacklisted FROM companies;""")
 res_list = list(res)
 
-df = pd.DataFrame(data=res_list, columns=['id', 'company_name', 'website_url', 'website_type', 'blacklisted'])
-df.to_csv('companies_seed.csv', index=False)
+df = pd.DataFrame(data=res_list, columns=['company_name', 'website_url', 'website_type', 'blacklisted'])
+df.to_csv('companies_to_add.csv', index=False)
