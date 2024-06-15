@@ -19,6 +19,3 @@ if [ $? -ne 0 ]; then
     echo "tmux not found. Try running apt install tmux to install it."
     exit 1
 fi
-
-chmod +x ./setup.sh
-chmod +x ./run_scrapers.sh

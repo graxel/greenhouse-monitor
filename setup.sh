@@ -40,6 +40,3 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "Done."
-
-chmod +x ./setup.sh
-chmod +x ./run_scrapers.sh
