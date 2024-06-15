@@ -204,9 +204,6 @@ while True:
 
         print(f"parsing scrape from {job_page_url}")
 
-        bucket_name = 'thelatestjobs'
-        folder_name = 'job_scrapes'
-        file_name = page_hash
 
         file_exists = fil.check_if_file_exists('job_scrapes', page_content_file_name)
         if not file_exists:

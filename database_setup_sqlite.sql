@@ -103,8 +103,7 @@ CREATE TABLE listing_parses (
 
 CREATE TABLE jobs (
   job_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  first_scraped_at TIMESTAMP,
-  last_scraped_at TIMESTAMP,
+  scraped_at TIMESTAMP,
   is_active TEXT,
   company_id INTEGER,
   company_name TEXT,
