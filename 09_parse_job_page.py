@@ -40,11 +40,11 @@ def scrape_greenhouse_page(soup):
         desc = ''
 
     data = {
-        'logo_url': logo_url,
+        # 'logo_url': logo_url,
         'job_title': title,
         'company_name': company_name,
         'location': location,
-        'description': desc
+        'job_description': desc
     }
     return data
 
@@ -128,19 +128,19 @@ def scrape_smartrecruiters_page(soup):
     desc = ' '.join([c_desc, j_desc, quals, addl_info])
 
     data = {
-        'logo_url': logo_url,
+        # 'logo_url': logo_url,
         'job_title': title,
-        'date_posted': date_posted,
-        'industry': industry,
+        # 'date_posted': date_posted,
+        # 'industry': industry,
         'company_name': company_name,
         'location': location,
-        'workplace_type': workplace_type,
-        'emp_type': emp_type,
-        'c_description': c_desc,
-        'j_description': j_desc,
-        'qualifications': quals,
-        'addl_info': addl_info,
-        'description': desc
+        # 'workplace_type': workplace_type,
+        # 'emp_type': emp_type,
+        # 'c_description': c_desc,
+        'job_description': j_desc,
+        # 'qualifications': quals,
+        # 'addl_info': addl_info,
+        # 'description': desc
     }
     return data
 
