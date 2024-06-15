@@ -86,23 +86,16 @@ while True:
             'website_url',
             'page_hash'
         ])
+        page_content_file_name = scrape['page_hash'].iloc[0] + '.html'
         website_url = scrape['website_url'].iloc[0]
         company_page_scrape_id = int(scrape['company_page_scrape_id'].iloc[0])
         print(f'got scrape record of {website_url}', flush=True)
 
-        file_exists = fil.check_if_file_exists_in_s3(
-            bucket_name = 'thelatestjobs',
-            folder_name = 'company_scrapes',
-            file_name = scrape['page_hash'].iloc[0]
-        )
+        file_exists = fil.check_if_file_exists('company_scrapes', page_content_file_name)
         if not file_exists:
-            print(f"page content not found!\n\tbucket_name={bucket_name}\n\tfolder_name={folder_name}\n\tfile_name={file_name}")
+            print(f"page content not found!\n\tdata/company_scrapes/{page_content_file_name}")
         else:
-            file_content = fil.load_file_from_s3(
-                bucket_name = 'thelatestjobs',
-                folder_name = 'company_scrapes',
-                file_name = scrape['page_hash'].iloc[0]
-            )
+            file_content = fil.load_file('company_scrapes', page_content_file_name)
             scrape['page_content'] = file_content.decode('utf-8')
 
             if scrape['page_content'].iloc[0] is None:

@@ -144,19 +144,12 @@ try:
 
             # Calculate page hash.
             page_hash = calculate_hash(page_content)
-
-            # If hash doesn't exist in s3, save to s3, otherwise do nothing
-            file_exists = fil.check_if_file_exists_in_s3(
-                bucket_name='thelatestjobs',
-                folder_name='company_scrapes',
-                file_name=page_hash
-            )
+            page_content_file_name = page_hash + '.html'
+            
+            # If file doesn't exist in folder, save to folder, otherwise do nothing
+            file_exists = fil.check_if_file_exists('company_scrapes', page_content_file_name)
             if file_exists == False:
-                fil.save_to_s3(page_content,
-                    bucket_name='thelatestjobs',
-                    folder_name='company_scrapes',
-                    file_name=page_hash
-                )
+                fil.save_file(page_content,'company_scrapes', page_content_file_name)
 
             # Store parsed data to db
             data = (started_at, finished_at, company_id, company_name, website_url, website_type, page_hash)
@@ -167,9 +160,6 @@ try:
             """
             fil.sql(insert_query, data)
 
-            # loop breaker
-            if website_url == 'https://careers.smartrecruiters.com/itw':
-                break
 
         except Exception as e:
             print(e)

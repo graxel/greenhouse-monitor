@@ -70,18 +70,13 @@ try:
                 finished_at = dt.now().strftime('%Y-%m-%d %H:%M:%S.%f')
 
                 page_hash = calculate_hash(page_content)
+                page_content_file_name = page_hash + '.html'
 
-                file_exists = fil.check_if_file_exists_in_s3(
-                    bucket_name='thelatestjobs',
-                    folder_name='job_scrapes',
-                    file_name=page_hash
-                )
+                # If file doesn't exist in folder, save to folder, otherwise do nothing
+                file_exists = fil.check_if_file_exists('job_scrapes', page_content_file_name)
                 if file_exists == False:
-                    fil.save_to_s3(page_content,
-                        bucket_name='thelatestjobs',
-                        folder_name='job_scrapes',
-                        file_name=page_hash
-                    )
+                    fil.save_file(page_content,'job_scrapes', page_content_file_name)
+
                 data = (started_at, finished_at, company_id, job_page_url, website_type, page_hash)
                 insert_query = f"""
                     INSERT INTO job_scrapes

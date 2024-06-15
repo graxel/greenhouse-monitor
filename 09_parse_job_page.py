@@ -195,15 +195,12 @@ while True:
             time.sleep(5)
             continue
         scraped_at, company_id, job_page_url, website_type, page_hash = scrape_data[0]
+        page_content_file_name = page_hash + '.html'
 
-
- 
         jobs_that_already_exist = check_for_job(job_page_url)
         if len(jobs_that_already_exist) > 0:
             print('hmm, that job_page_url is already in the jobs table')
             # break
-
-
 
         print(f"parsing scrape from {job_page_url}")
 
@@ -211,12 +208,12 @@ while True:
         folder_name = 'job_scrapes'
         file_name = page_hash
 
-        file_exists = fil.check_if_file_exists_in_s3(bucket_name, folder_name, file_name)
+        file_exists = fil.check_if_file_exists('job_scrapes', page_content_file_name)
         if not file_exists:
-            print(f"s3://{bucket_name}/{folder_name}/{file_name} not found!")
+            print(f"page content not found!\n\tdata/job_scrapes/{page_content_file_name}")
             break
         else:
-            file_content = fil.load_file_from_s3(bucket_name, folder_name, file_name)
+            file_content = fil.load_file('job_scrapes', page_content_file_name)
             html_content = file_content.decode('utf-8')
 
             soup = BeautifulSoup(html_content, 'html.parser')
