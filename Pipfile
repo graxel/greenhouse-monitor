@@ -9,7 +9,6 @@ pandas = "*"
 numpy = "*"
 beautifulsoup4 = "*"
 schedule = "*"
-duckduckgo-search = "*"
 selenium = "*"
 selenium-stealth = "*"
 google = "*"
@@ -18,6 +17,8 @@ matplotlib = "*"
 scikit-learn = "*"
 pyarrow = "*"
 streamlit = "*"
+validators = "*"
+packaging = "*"
 
 [dev-packages]
 
