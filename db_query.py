@@ -1,6 +1,7 @@
 import os
-# import fil
+import fil
 import sys
+import pandas as pd
 
 for i,arg in enumerate(sys.argv):
     print(i, arg)
@@ -16,6 +17,7 @@ else:
     else:
         query = query_or_file
     print(f'query is:\n{query}')
-    # res = fil.sql(query)
-    # for row in res:
-    #     print(row)
+    res = fil.sql(query)
+    print(pd.DataFrame(res))
+    for row in res:
+        print(row)
