@@ -71,7 +71,7 @@ oldest_scrape_query = """
 
 while True:
     scrape_resp = fil.sql(oldest_scrape_query)
-    if len(scrape_resp) == 0:
+    if scrape_resp is None or len(scrape_resp) == 0:
         print('waiting for more scrapes')
         time.sleep(30)
     else:
