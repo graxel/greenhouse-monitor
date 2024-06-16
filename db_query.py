@@ -18,6 +18,7 @@ else:
         query = query_or_file
     print(f'query is:\n{query}')
     res = fil.sql(query)
+    if res is not None:
+        for row in res:
+            print(row)
     print(pd.DataFrame(res))
-    for row in res:
-        print(row)
