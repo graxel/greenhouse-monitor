@@ -19,9 +19,9 @@ the_latest_jobs = fil.sql("""
     ;""")
 
 
-df = pd.DataFrame(the_latest_jobs, columns=['Scraped At', 'Company Name', 'Job Title', 'Location', 'URL'])
+df = pd.DataFrame(the_latest_jobs, columns=['Scraped at', 'Company Name', 'Job Title', 'Location', 'URL'])
+df['Scraped at'] = pd.to_datetime(df['Scraped at'], format='%Y-%m-%d %H:%M:%S.%f').dt.round('s')
 
-df['Scraped At'] = df['Scraped At'].dt.round('s')
 df['URL'] = df['URL'].apply(lambda x: f'<a href="{x}" target="_blank">{x}</a>')
 
 html_table = df.to_html(escape=False, index=False)
