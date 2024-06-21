@@ -28,10 +28,7 @@ def execute_sql():
 
     try:
         rows = fil.sql(sql_command)
-
-        # Convert the result to a list of dictionaries
-        results = [dict(row) for row in rows]
-        return jsonify(results), 200
+        return jsonify(rows), 200
 
     except:
         error_msg = str(traceback.format_exc())
