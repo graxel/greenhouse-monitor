@@ -21,10 +21,7 @@ def execute_sql():
             from jobs
             order by job_id desc
             ;""")
-
-        # Convert the result to a list of dictionaries
-        results = [dict(row) for row in rows]
-        return jsonify(results), 200
+        return jsonify(rows), 200
 
     try:
         rows = fil.sql(sql_command)
