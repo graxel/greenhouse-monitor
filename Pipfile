@@ -20,6 +20,7 @@ streamlit = "*"
 validators = "*"
 packaging = "*"
 sentence-transformers = "*"
+flask = "*"
 
 [dev-packages]
 
