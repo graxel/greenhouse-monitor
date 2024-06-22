@@ -57,21 +57,26 @@ def get_company_to_scrape():
 def sel_scroll(driver):
     # scroll to the bottom of the page
     prev_height = driver.execute_script("return document.body.scrollHeight")
-    while True:
+    for i in range(1, 999999):
+        if i % 10 == 0:
+            print()
         print('\tscrolling down', flush=True)
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(1)
         new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == prev_height: break
+        if new_height == prev_height:
+            break
         prev_height = new_height
     # print('done scrolling', flush=True)
 
 def sel_show_more_jobs(driver):
     # click every "Show more jobs" link
-    while True:
+    for i in range(1, 999999):
         try: 
             more_links = driver.find_elements(By.XPATH, "//a[text()='Show more jobs']")
             if more_links:
+                if i % 10 == 0:
+                    print()
                 print('\tclicking "Show more jobs"', flush=True)
                 driver.execute_script("arguments[0].scrollIntoView(true);", more_links[-1])
                 time.sleep(0.1)
