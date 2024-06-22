@@ -16,5 +16,6 @@ else:
     res = fil.sql(query, col_names=True)
     if res is not None:
         rows, column_names = res
+        print(column_names)
         for row in rows:
             print(row)
