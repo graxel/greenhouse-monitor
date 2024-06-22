@@ -13,7 +13,8 @@ else:
             query = f.read()
     else:
         query = query_or_file
-    res = fil.sql(query)
+    res = fil.sql(query, col_names=True)
     if res is not None:
-        for row in res:
+        rows, column_names = res
+        for row in rows:
             print(row)

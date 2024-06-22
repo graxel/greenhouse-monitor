@@ -11,7 +11,7 @@ def execute_sql():
     sql_command = data.get('sql_command')
 
     if not sql_command:
-        rows = fil.sql("""
+        sql_command = """
             select
                 scraped_at,
                 company_name,
@@ -20,12 +20,11 @@ def execute_sql():
                 job_page_url
             from jobs
             order by job_id desc
-            ;""")
-        return jsonify(rows), 200
+            ;"""
 
     try:
-        rows = fil.sql(sql_command)
-        return jsonify(rows), 200
+        rows, column_names = fil.sql(sql_command, col_names=True)
+        return jsonify({'data': rows, 'columns': column_names}), 200
 
     except:
         error_msg = str(traceback.format_exc())

@@ -13,5 +13,9 @@ else:
             query = f.read()
     else:
         query = query_or_file
-    res = fil.sql(query)
-    print(pd.DataFrame(res))
+    res = fil.sql(query, col_names=True)
+    if res is not None:
+        rows, column_names = res
+        print(pd.DataFrame(data=rows, columns=column_names))
+    else:
+        print(pd.DataFrame(res))

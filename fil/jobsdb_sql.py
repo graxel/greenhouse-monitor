@@ -1,7 +1,7 @@
 import sqlite3
 import traceback
 
-def sql(query, data=None):
+def sql(query, data=None, col_names=False):
     try:
         conn = sqlite3.connect('fil.db')
         cursor = conn.cursor()
@@ -12,7 +12,11 @@ def sql(query, data=None):
         conn.commit()
         if cursor.description:  # Check if the query returns any result
             rows = cursor.fetchall()
-            return rows
+            if col_names == True:
+                column_names = [description[0] for description in cursor.description]
+                return rows, column_names
+            else:
+                return rows
     except:
         print(F"Error: Unable to execute the query.\n{query}")
         print(traceback.format_exc())
