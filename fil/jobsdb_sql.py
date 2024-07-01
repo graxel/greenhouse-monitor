@@ -1,3 +1,4 @@
+from datetime import datetime as dt
 import sqlite3
 import traceback
 
@@ -18,7 +19,8 @@ def sql(query, data=None, col_names=False):
             else:
                 return rows
     except:
-        print(F"Error: Unable to execute the query.\n{query}")
+        print(dt.now())
+        print(f"Error: Unable to execute the query. Query:\n{query}\n")
         print(traceback.format_exc())
     finally:
         if cursor:

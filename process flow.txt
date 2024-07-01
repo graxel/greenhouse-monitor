@@ -1,0 +1,36 @@
+
+06_scrape_company_page
+    periodically scrape company page
+    store hash in company_page_scrapes in db
+    store page content and hash in s3
+
+07_parse_listings
+    constantly check company_page_scrapes for page hashes that exist in company_page_scrapes but not in listing_parses
+    if a hash is found, load its page content from s3
+    parse page content
+    store found job links in listing_parses
+
+08_scrape_job_page
+    constantly check listing_parses for job page urls that exist in listing_parses but not in job_scrapes
+    if a job_page_url is found, scrape it
+    store hash in job_scrapes in db
+    store page content and hash in s3
+
+09_parse_job_page
+    constantly check job_scrapes for page hashes that exist in job_scrapes but not in jobs
+    if a hash is found, load its page content from s3
+    parse page content
+    store found job details in jobs
+
+10_update_job_embeddings
+    constantly check jobs for jobs without embeddings
+    calculate job embeddings
+    normalize vectors with db avg
+    store in a db: postgres first, milvus later
+
+10a_deep_embedding_update (slow)
+    calculate new db avg
+    renormalize vectors
+    store in a db: postgres first, milvus later
+
+11_

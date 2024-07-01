@@ -37,7 +37,7 @@ def get_company_to_scrape():
         WITH latest_scrapes AS (
             SELECT finished_at, company_id
             FROM (
-                SELECT company_id, started_at, finished_at,
+                SELECT company_id, finished_at,
                     ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY finished_at DESC NULLS LAST) AS rn
                 FROM company_page_scrapes
             ) labelled_scrapes
@@ -46,7 +46,7 @@ def get_company_to_scrape():
         SELECT companies.id, companies.company_name, companies.website_url, companies.website_type
         FROM latest_scrapes
         FULL OUTER JOIN companies ON latest_scrapes.company_id = companies.id
-        WHERE companies.blacklisted=false
+        WHERE companies.blacklisted = false
         ORDER BY latest_scrapes.finished_at ASC NULLS FIRST
         LIMIT 1
         ;""")
@@ -84,7 +84,7 @@ def sel_show_more_jobs(driver):
             else:
                 break
         except StaleElementReferenceException:
-            pass
+            print('\tStaleElementReferenceException', flush=True)
 
 def sel_expand(driver):
     # expand all accordion buttons
