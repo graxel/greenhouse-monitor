@@ -2,9 +2,9 @@ from datetime import datetime as dt
 import sqlite3
 import traceback
 
-def sql(query, data=None, col_names=False):
+def sql(query, data=None, col_names=False, db_file='fil.db'):
     try:
-        conn = sqlite3.connect('fil.db')
+        conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
         if data is None:
             cursor.execute(query)
