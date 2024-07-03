@@ -1,9 +1,14 @@
+from datetime import datetime as dt
 import fil
 from transformers import DistilBertTokenizer
+
+start = dt.now()
 
 # Load pre-trained tokenizer
 model_name = 'distilbert-base-uncased'
 tokenizer = DistilBertTokenizer.from_pretrained(model_name)
+model_loaded = dt.now()
+print('model loaded in', (model_loaded - start).total_seconds(), 'seconds.')
 
 rows = fil.sql(
     """
@@ -14,10 +19,13 @@ rows = fil.sql(
     ;"""
 )
 print('rows retrieved:', len(rows))
+query_executed = dt.now()
+print('query executed in', (query_executed - model_loaded).total_seconds(), 'seconds.')
+
 rows_processed = 0
 
 for row in rows:
-    rows_processed += 1
+    
     if rows_processed % 200 == 0:
         print('\n', end='', flush=True)
     if rows_processed % 100 == 0:
@@ -34,3 +42,8 @@ for row in rows:
         data=(tokens_length, job_id)
     )
 
+    rows_processed += 1
+
+rows_updated = dt.now()
+print('rows updated in', (rows_updated - query_executed).total_seconds(), 'seconds.')
+print('(', (rows_updated - query_executed).total_seconds() / rows_processed, ' seconds per row)', sep='')
