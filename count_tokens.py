@@ -26,10 +26,10 @@ rows_processed = 0
 
 for row in rows:
     
-    if rows_processed % 200 == 0:
-        print('\n', end='', flush=True)
     if rows_processed % 100 == 0:
         print('   ', end=' ', flush=True)
+    if rows_processed % 200 == 0:
+        print('\n', end='', flush=True)
     if rows_processed % 20 == 0:
         print(f"{rows_processed:03}", end=' ', flush=True)
 
