@@ -1,2 +1,3 @@
 fil.db
 fil/__pycache__/*
+*.pyc
